@@ -19,12 +19,15 @@ Route::post('login', [LoginController::class,'login']);
 
 Route::post('registro_a', [RegisterController::class,'a_register']);
 Route::get('administradores', [AdministradorController::class,'index']);
+Route::post('mod_administradores', [AdministradorController::class,'store']);
 
 Route::post('registro_d', [RegisterController::class,'d_register']);
 Route::get('docentes', [DocenteController::class,'index']);
+Route::post('mod_docentes', [DocenteController::class,'store']);
 
 Route::post('registro_e', [RegisterController::class,'e_register']);
 Route::get('estudiantes', [EstudianteController::class,'index']);
+Route::post('mod_estudiantes', [EstudianteController::class,'store']);
 
 Route::post('registro_t', [RegisterController::class,'t_register']);
 Route::get('talleres', [TallerController::class,'index']);

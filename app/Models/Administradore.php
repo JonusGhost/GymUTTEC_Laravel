@@ -11,18 +11,27 @@ use Laravel\Sanctum\HasApiTokens;
 class Administradores extends Model
 {
     use HasFactory;
-    protected $table = 'user_administradores';
+    protected $table = 'administradores';
+    protected $primaryKey = 'num_empleado'; 
+    public $incrementing = false; 
+    protected $keyType = 'string';
 }
 
-class A_User extends Authenticatable
+class Administradore extends Authenticatable
 {
     use HasFactory, Notifiable, HasApiTokens;
+    protected $table = 'administradores';
+    protected $primaryKey = 'num_empleado'; 
+    public $incrementing = false; 
+    protected $keyType = 'string';
+
     /**
      * The attributes that are mass assignable.
      *
      * @var array<int, string>
      */
     protected $fillable = [
+        'num_empleado',
         'nombre',
         'email',
         'password',

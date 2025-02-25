@@ -8,15 +8,23 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
-class Docentes extends Model
+class Estudiantes extends Model
 {
     use HasFactory;
-    protected $table = 'user_docentes';
+    protected $table = 'estudiantes';
+    protected $primaryKey = 'matricula'; 
+    public $incrementing = false; 
+    protected $keyType = 'string';
 }
 
-class D_User extends Authenticatable
+class Estudiante extends Authenticatable
 {
     use HasFactory, Notifiable, HasApiTokens;
+    protected $table = 'estudiantes';
+    protected $primaryKey = 'matricula'; 
+    public $incrementing = false; 
+    protected $keyType = 'string';
+    
     /**
      * The attributes that are mass assignable.
      *
