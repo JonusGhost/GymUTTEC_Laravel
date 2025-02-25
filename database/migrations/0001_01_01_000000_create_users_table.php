@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {   
-        Schema::create('user_administradores', function (Blueprint $table) {
+        Schema::create('administradores', function (Blueprint $table) {
             $table->string('num_empleado')->primary();
             $table->string('nombre');
             $table->string('apellido_pat');
@@ -25,7 +25,7 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        Schema::create('user_docentes', function (Blueprint $table) {
+        Schema::create('docentes', function (Blueprint $table) {
             $table->string('num_empleado')->primary();
             $table->string('nombre');
             $table->string('apellido_pat');
@@ -41,7 +41,7 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        Schema::create('user_estudiantes', function (Blueprint $table) {
+        Schema::create('estudiantes', function (Blueprint $table) {
             $table->string('matricula')->primary();
             $table->string('nombre');
             $table->string('apellido_pat');

@@ -20,7 +20,7 @@ return new class extends Migration
             $table->enum('estado', ['presente', 'ausente', 'justificado'])->default('presente');
             $table->timestamps();
             $table->foreign('taller_id')->references('id')->on('talleres')->onDelete('cascade');
-            $table->foreign('matricula')->references('matricula')->on('user_estudiantes')->onDelete('cascade');
+            $table->foreign('matricula')->references('matricula')->on('estudiantes')->onDelete('cascade');
         });
     }
 

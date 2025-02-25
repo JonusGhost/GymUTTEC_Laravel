@@ -8,13 +8,13 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
-class Administradores extends Model
+class Docentes extends Model
 {
     use HasFactory;
-    protected $table = 'user_administradores';
+    protected $table = 'docentes';
 }
 
-class A_User extends Authenticatable
+class Docente extends Authenticatable
 {
     use HasFactory, Notifiable, HasApiTokens;
     /**
