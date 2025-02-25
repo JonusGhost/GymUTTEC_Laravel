@@ -12,11 +12,19 @@ class Estudiantes extends Model
 {
     use HasFactory;
     protected $table = 'estudiantes';
+    protected $primaryKey = 'matricula'; 
+    public $incrementing = false; 
+    protected $keyType = 'string';
 }
 
 class Estudiante extends Authenticatable
 {
     use HasFactory, Notifiable, HasApiTokens;
+    protected $table = 'estudiantes';
+    protected $primaryKey = 'matricula'; 
+    public $incrementing = false; 
+    protected $keyType = 'string';
+    
     /**
      * The attributes that are mass assignable.
      *

@@ -20,7 +20,6 @@ class Administradores extends Model
 class Administradore extends Authenticatable
 {
     use HasFactory, Notifiable, HasApiTokens;
-    
     protected $table = 'administradores';
     protected $primaryKey = 'num_empleado'; 
     public $incrementing = false; 
