@@ -10,14 +10,50 @@ return new class extends Migration
      * Run the migrations.
      */
     public function up(): void
-    {
-        Schema::create('users', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
+    {   
+        Schema::create('user_administradores', function (Blueprint $table) {
+            $table->string('num_empleado')->primary();
+            $table->string('nombre');
+            $table->string('apellido_pat');
+            $table->string('apellido_mat');
+            $table->string('num_celular');
+            $table->string('afili_seguro');
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();
+            $table->timestamps();
+        });
+
+        Schema::create('user_docentes', function (Blueprint $table) {
+            $table->string('num_empleado')->primary();
+            $table->string('nombre');
+            $table->string('apellido_pat');
+            $table->string('apellido_mat');
+            $table->string('num_celular');
+            $table->string('afili_seguro');
+            $table->string('email')->unique();
+            $table->timestamp('email_verified_at')->nullable();
+            $table->string('password');
+            $table->rememberToken();
+            $table->string('especialidad');
+            $table->string('taller_asignado');
+            $table->timestamps();
+        });
+
+        Schema::create('user_estudiantes', function (Blueprint $table) {
+            $table->string('matricula')->primary();
+            $table->string('nombre');
+            $table->string('apellido_pat');
+            $table->string('apellido_mat');
+            $table->string('num_celular');
+            $table->string('afili_seguro');
+            $table->string('email')->unique();
+            $table->timestamp('email_verified_at')->nullable();
+            $table->string('password');
+            $table->rememberToken();
+            $table->string('grado');
+            $table->string('sit_academica');
             $table->timestamps();
         });
 
@@ -29,7 +65,8 @@ return new class extends Migration
 
         Schema::create('sessions', function (Blueprint $table) {
             $table->string('id')->primary();
-            $table->foreignId('user_id')->nullable()->index();
+            $table->foreignId('user_id');
+            $table->enum('user_type', ['administrador', 'docente', 'estudiante']); 
             $table->string('ip_address', 45)->nullable();
             $table->text('user_agent')->nullable();
             $table->longText('payload');
@@ -42,8 +79,9 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('users');
         Schema::dropIfExists('password_reset_tokens');
-        Schema::dropIfExists('sessions');
+        Schema::dropIfExists('user_estudiantes');
+        Schema::dropIfExists('user_docentes');
+        Schema::dropIfExists('user_administradores');
     }
 };
