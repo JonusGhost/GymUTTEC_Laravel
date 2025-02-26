@@ -13,7 +13,7 @@ class TallerController extends Controller
         return $talleres;
     }
     
-    public function t_register(Request $req)
+    public function store(Request $req)
     {
         if($req->id != 0)
         {
