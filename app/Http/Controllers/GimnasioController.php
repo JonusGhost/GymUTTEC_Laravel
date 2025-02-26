@@ -13,7 +13,7 @@ class GimnasioController extends Controller
         return $gimnasios;
     }
 
-    public function g_register(Request $req)
+    public function store(Request $req)
     {
         if($req->id != 0)
         {

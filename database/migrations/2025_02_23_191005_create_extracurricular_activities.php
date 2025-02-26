@@ -18,13 +18,12 @@ return new class extends Migration
             $table->string('horario');
             $table->integer('num_alumnos')->default(0);
             $table->string('enlace_grupo')->nullable();
-
             $table->string('emp_docente_1');
-            $table->foreign('emp_docente_1')->references('num_empleado')->on('docentes')->onDelete('set null');
+            $table->foreign('emp_docente_1')->references('matricula')->on('docentes')->onDelete('set null');
             $table->string('emp_docente_2');
-            $table->foreign('emp_docente_2')->references('num_empleado')->on('docentes')->onDelete('set null');
+            $table->foreign('emp_docente_2')->references('matricula')->on('docentes')->onDelete('set null');
             $table->string('emp_docente_3');
-            $table->foreign('emp_docente_3')->references('num_empleado')->on('docentes')->onDelete('set null');
+            $table->foreign('emp_docente_3')->references('matricula')->on('docentes')->onDelete('set null');
             $table->timestamps();
         });
 
@@ -36,7 +35,7 @@ return new class extends Migration
             $table->integer('num_alumnos')->default(0);
             $table->string('enlace_grupo')->nullable();
             $table->string('emp_docente');
-            $table->foreign('emp_docente')->references('num_empleado')->on('docentes')->onDelete('set null');
+            $table->foreign('emp_docente')->references('matricula')->on('docentes')->onDelete('set null');
             $table->timestamps();
         });
     }

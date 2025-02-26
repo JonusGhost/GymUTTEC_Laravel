@@ -8,35 +8,29 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
-class Administradores extends Model
+class Usuarios extends Model
 {
     use HasFactory;
-    protected $table = 'administradores';
-    protected $primaryKey = 'num_empleado'; 
-    public $incrementing = false; 
-    protected $keyType = 'string';
+    protected $table = 'usuarios';
 }
 
-class Administradore extends Authenticatable
+class User extends Authenticatable
 {
     use HasFactory, Notifiable, HasApiTokens;
-    protected $table = 'administradores';
-    protected $primaryKey = 'num_empleado'; 
+    protected $primaryKey = 'matricula';
     public $incrementing = false; 
     protected $keyType = 'string';
-
-    /**
+        /**
      * The attributes that are mass assignable.
      *
      * @var array<int, string>
      */
     protected $fillable = [
-        'num_empleado',
-        'nombre',
+        'matricula',
         'email',
         'password',
     ];
-    
+
     /**
      * The attributes that should be hidden for serialization.
      *
@@ -52,7 +46,7 @@ class Administradore extends Authenticatable
      *
      * @return array<string, string>
      */
-    protected function casts()
+    protected function casts(): array
     {
         return [
             'email_verified_at' => 'datetime',
