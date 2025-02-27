@@ -12,7 +12,18 @@ class TallerController extends Controller
         $talleres = Talleres::get();
         return $talleres;
     }
+
+    public function taller($id) {
+        $taller = Talleres::where('id',$id)->first();
+        return $taller;
+    }
     
+    public function destroy($id) {
+        $taller = Talleres::find($id);
+        $taller->delete();
+        return 'Ok';;
+    }
+
     public function store(Request $req)
     {
         if($req->id != 0)

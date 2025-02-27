@@ -22,6 +22,16 @@ return new class extends Migration
             $table->foreign('taller_id')->references('id')->on('talleres')->onDelete('cascade');
             $table->foreign('matricula')->references('matricula')->on('estudiantes')->onDelete('cascade');
         });
+
+        Schema::create('inscripciones', function (Blueprint $table) {
+            $table->id();
+            $table->string('matricula');
+            $table->unsignedBigInteger('taller_id');
+            $table->timestamps();            
+            $table->foreign('matricula')->references('matricula')->on('estudiantes')->onDelete('cascade');
+            $table->foreign('taller_id')->references('id')->on('talleres')->onDelete('cascade');
+        });
+        
     }
 
     /**
