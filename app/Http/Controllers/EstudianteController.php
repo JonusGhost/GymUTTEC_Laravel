@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Estudiante;
+use App\Models\Inscripcion;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -19,13 +20,40 @@ class EstudianteController extends Controller
         $estudiante = Estudiante::where('matricula',$matricula)->first();
         return $estudiante;
     }
+    
+    public function inscrip(Request $req)
+    {
+        $matricula = trim($req->matricula);
+        $a_user = Estudiante::where('matricula', $matricula)->first();
+        if ($a_user){
+            $inscripcion = new Inscripcion();
+            $inscripcion->matricula = $req->matricula;
+            $inscripcion->taller_id = $req->taller_id;
+            $inscripcion->save();
+        } else {
+            return 'Matricula inexistente';
+        }
+    }
+    
+    public function anular(Request $req)
+    {
+        $matricula = trim($req->matricula);
+        $taller_id = trim($req->taller_id);
+        $inscripcion = Inscripcion::where('matricula', $matricula)->where('taller_id', $taller_id)->first();
+        if ($inscripcion) {
+            $inscripcion->delete();
+            return 'Ok';
+        } else {
+            return 'Inscripcion inexistente';
+        }
+    }
 
     public function destroy($matricula) {
         $user = User::find($matricula);
         if ($user){
-            $admin = Estudiante::where('matricula',$matricula)->first();
-            if ($admin){
-                $admin->delete();
+            $estudiante = Estudiante::where('matricula',$matricula)->first();
+            if ($estudiante){
+                $estudiante->delete();
             }
             $user->delete();
             return 'Ok';

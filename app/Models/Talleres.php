@@ -11,4 +11,9 @@ class Talleres extends Model
     protected $fillable = [
         'nombre_tall', 'descripcion', 'horario', 'num_alumnos', 'enlace_grupo', 'emp_docente'
     ];
+
+    public function docente()
+    {
+        return $this->belongsTo(Docente::class);
+    }
 }

@@ -13,6 +13,17 @@ class GimnasioController extends Controller
         return $gimnasios;
     }
 
+    public function gimnasio($id) {
+        $gimnasio = Gimnasios::where('id',$id)->first();
+        return $gimnasio;
+    }
+
+    public function destroy($id) {
+        $gimnasio = Gimnasios::find($id);
+        $gimnasio->delete();
+        return 'Ok';;
+    }
+
     public function store(Request $req)
     {
         if($req->id != 0)
