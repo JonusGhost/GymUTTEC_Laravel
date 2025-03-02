@@ -14,10 +14,11 @@ return new class extends Migration
         Schema::create('gimnasios', function (Blueprint $table) {
             $table->id();
             $table->string('nombre_gim');
-            $table->text('descripcion')->nullable();
-            $table->string('horario')->nullable();
-            $table->integer('num_alumnos')->default(0);
+            $table->string('imagen')->nullable();
             $table->string('enlace_grupo')->nullable();
+            $table->text('descripcion')->nullable();
+            $table->json('horario')->nullable();
+            $table->integer('num_alumnos')->default(0);
             $table->string('emp_docente_1')->nullable();
             $table->foreign('emp_docente_1')->references('matricula')->on('docentes')->onDelete('set null');
             $table->string('emp_docente_2')->nullable();
@@ -30,10 +31,11 @@ return new class extends Migration
         Schema::create('talleres', function (Blueprint $table) {
             $table->id();
             $table->string('nombre_tall');
-            $table->text('descripcion')->nullable();
-            $table->string('horario')->nullable();;
-            $table->integer('num_alumnos')->default(0);
+            $table->string('imagen')->nullable();
             $table->string('enlace_grupo')->nullable();
+            $table->text('descripcion')->nullable();
+            $table->json('horario')->nullable();
+            $table->integer('num_alumnos')->default(0);
             $table->string('emp_docente')->nullable();;
             $table->foreign('emp_docente')->references('matricula')->on('docentes')->onDelete('set null');
             $table->timestamps();

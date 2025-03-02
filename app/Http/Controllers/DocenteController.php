@@ -61,7 +61,6 @@ class DocenteController extends Controller
         $d_user->num_celular = $req->num_celular;
         $d_user->afili_seguro = $req->afili_seguro;    
         $d_user->especialidad = $req->especialidad;
-        $d_user->taller_asignado = $req->taller_asignado;
         $d_user->save();
 
         return 'Ok';

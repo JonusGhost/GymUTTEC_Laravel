@@ -30,6 +30,7 @@ return new class extends Migration
             $table->timestamps();            
             $table->foreign('matricula')->references('matricula')->on('estudiantes')->onDelete('cascade');
             $table->foreign('taller_id')->references('id')->on('talleres')->onDelete('cascade');
+            $table->unique(['taller_id', 'matricula']);
         });
         
     }
