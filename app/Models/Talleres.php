@@ -9,7 +9,11 @@ class Talleres extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'nombre_tall', 'descripcion', 'horario', 'num_alumnos', 'enlace_grupo', 'emp_docente'
+        'nombre_tall', 'descripcion', 'num_alumnos', 'enlace_grupo', 'emp_docente'
+    ];
+
+    protected $casts = [
+        'horario' => 'array',
     ];
 
     public function docente()

@@ -33,10 +33,15 @@ class TallerController extends Controller
             $t_modul = new Talleres();
         }
         $t_modul->nombre_tall = $req->nombre_tall;
-        $t_modul->descripcion = $req->descripcion;
-        $t_modul->horario = $req->horario;
-        $t_modul->num_alumnos = $req->num_alumnos;
+        if ($req->hasFile('imagen')) {
+            $imagen = $req->file('imagen');
+            $rutaImagen = $imagen->store('imagenes_talleres', 'public');
+            $t_modul->imagen = $rutaImagen;
+        }
         $t_modul->enlace_grupo = $req->enlace_grupo;
+        $t_modul->descripcion = $req->descripcion;
+        $t_modul->horario = json_decode($req->horario, true);
+        $t_modul->num_alumnos = $req->num_alumnos;
         $t_modul->emp_docente = $req->emp_docente;
         $t_modul->save();
 

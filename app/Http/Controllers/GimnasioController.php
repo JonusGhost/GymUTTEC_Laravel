@@ -33,10 +33,16 @@ class GimnasioController extends Controller
             $g_modul = new Gimnasios();
         }
         $g_modul->nombre_gim = $req->nombre_gim;
-        $g_modul->descripcion = $req->descripcion;
-        $g_modul->horario = $req->horario;
-        $g_modul->num_alumnos = $req->num_alumnos;
+        $g_modul->nombre_tall = $req->nombre_tall;
+        if ($req->hasFile('imagen')) {
+            $imagen = $req->file('imagen');
+            $rutaImagen = $imagen->store('imagenes_talleres', 'public');
+            $g_modul->imagen = $rutaImagen;
+        }
         $g_modul->enlace_grupo = $req->enlace_grupo;
+        $g_modul->descripcion = $req->descripcion;
+        $g_modul->horario = json_decode($req->horario, true);
+        $g_modul->num_alumnos = $req->num_alumnos;
         $g_modul->emp_docente_1 = $req->emp_docente_1;
         $g_modul->emp_docente_2 = $req->emp_docente_2;
         $g_modul->emp_docente_3 = $req->emp_docente_3;

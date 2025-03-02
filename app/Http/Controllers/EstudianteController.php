@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Estudiante;
 use App\Models\Inscripcion;
+use App\Models\Talleres;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -24,15 +25,25 @@ class EstudianteController extends Controller
     public function inscrip(Request $req)
     {
         $matricula = trim($req->matricula);
+        $taller_id = $req->taller_id;
+
         $a_user = Estudiante::where('matricula', $matricula)->first();
-        if ($a_user){
-            $inscripcion = new Inscripcion();
-            $inscripcion->matricula = $req->matricula;
-            $inscripcion->taller_id = $req->taller_id;
-            $inscripcion->save();
-        } else {
+        if (!$a_user){
             return 'Matricula inexistente';
         }
+        $taller = Talleres::find($taller_id);
+        if (!$taller_id){
+            return 'Taller inexistente';
+        }
+        $inscritos = Inscripcion::where('taller_id',$taller_id)->count();
+        if ($inscritos >= $taller->num_alumnos){
+            return 'Taller alcanzo el cupo maximo de estudiantes';
+        }
+        $inscripcion = new Inscripcion();
+        $inscripcion->matricula = $matricula;
+        $inscripcion->taller_id = $taller_id;
+        $inscripcion->save();
+        return 'Ok';
     }
     
     public function anular(Request $req)

@@ -59,7 +59,6 @@ return new class extends Migration
             $table->string('num_celular');
             $table->string('afili_seguro');
             $table->string('especialidad');
-            $table->string('taller_asignado');
             $table->timestamps();
         });
 
