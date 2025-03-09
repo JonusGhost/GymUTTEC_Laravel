@@ -48,7 +48,7 @@ class DocenteController extends Controller
             $user->email = $req->email;
 
             if (User::where('email', $req->email)->exists()) {
-                return 'El correo ya está en uso';
+                response()->json(['mensaje' => 'El correo ya está en uso'], 400);
             }
 
             $user->password = Hash::make($req->password);
@@ -63,6 +63,9 @@ class DocenteController extends Controller
         $d_user->especialidad = $req->especialidad;
         $d_user->save();
 
-        return 'Ok';
+        return response()->json([
+            'mensaje' => 'Docente guardado',
+            'docente' => $d_user
+        ], 201);
     }
 }

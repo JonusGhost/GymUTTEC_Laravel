@@ -13,7 +13,7 @@ class LoginController extends Controller
         {
             $user = Auth::user();
             $token = $user->createToken('app')->plainTextToken;
-            $arr = array('acceso' => "Ok", 'error' => "", 'token' => $token, 'idUsuario' => $user->matricula);
+            $arr = array('acceso' => "Ok", 'error' => "", 'token' => $token, 'idUsuario' => $user->matricula, 'rolUsuario'=> $user->rol);
             return json_encode($arr);
         }else{
             $arr = array('acceso' => "", 'error' => "No existe el usuario o contraseña", 'idUsuario' => 0);

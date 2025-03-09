@@ -50,7 +50,7 @@ class AdministradorController extends Controller
             $user->email = $req->email;
 
             if (User::where('email', $req->email)->exists()) {
-                return 'El correo ya está en uso';
+                response()->json(['mensaje' => 'El correo ya está en uso'], 400);
             }
 
             $user->password = Hash::make($req->password);
@@ -64,7 +64,10 @@ class AdministradorController extends Controller
         $a_user->afili_seguro = $req->afili_seguro;
         $a_user->save();
 
-        return 'Ok';
+        return response()->json([
+            'mensaje' => 'Administrador guardado',
+            'administrador' => $a_user
+        ], 201);
     }
 
     public function altaT($matricula, $taller_id)
