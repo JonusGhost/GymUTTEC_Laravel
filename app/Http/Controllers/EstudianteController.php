@@ -75,9 +75,9 @@ class EstudianteController extends Controller
     public function store(Request $req)
     {
         $matricula = trim($req->matricula);
-        $a_user = Estudiante::where('matricula', $matricula)->first();
+        $e_user = Estudiante::where('matricula', $matricula)->first();
 
-        if (!$a_user) {
+        if (!$e_user) {
             $e_user = new Estudiante();
             $e_user->matricula = $matricula;
 
@@ -87,7 +87,7 @@ class EstudianteController extends Controller
             $user->email = $req->email;
 
             if (User::where('email', $req->email)->exists()) {
-                return 'El correo ya está en uso';
+                response()->json(['mensaje' => 'El correo ya está en uso'], 400);
             }
 
             $user->password = Hash::make($req->password);
@@ -103,6 +103,9 @@ class EstudianteController extends Controller
         $e_user->sit_academica = $req->sit_academica;
         $e_user->save();
 
-        return 'Ok';
+        return response()->json([
+            'mensaje' => 'Estudiante guardado',
+            'estudiante' => $e_user
+        ], 201);
     }
 }
