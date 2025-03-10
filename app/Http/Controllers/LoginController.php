@@ -9,7 +9,7 @@ class LoginController extends Controller
 {
     public function login(Request $request)
     {
-        if(Auth::attempt(['email' => $request->email, 'password' => $request->password]))
+        if(Auth::attempt(['matricula' => $request->matricula, 'password' => $request->password]))
         {
             $user = Auth::user();
             $token = $user->createToken('app')->plainTextToken;
