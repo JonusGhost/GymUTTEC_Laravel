@@ -92,3 +92,4 @@ Route::post('asistencias/pasar-lista', [AsistenciaController::class, 'pasarLista
 
 // Inscripciones
 Route::get('inscripciones', [InscripionController::class,'index']);
+Route::get('inscripcion/estudiante/{matricula}', [InscripionController::class,'esttaller']);

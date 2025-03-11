@@ -13,4 +13,10 @@ class InscripionController extends Controller
         $inscripciones = Inscripcion::get();
         return $inscripciones;
     }
+
+    public function esttaller($matricula)
+    {
+        $inscripciones = Inscripcion::where('matricula',$matricula)->get();
+        return $inscripciones;
+    }
 }

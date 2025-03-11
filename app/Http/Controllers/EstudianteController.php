@@ -81,15 +81,14 @@ class EstudianteController extends Controller
             $e_user = new Estudiante();
             $e_user->matricula = $matricula;
 
+            if (User::where('email', strtolower($req->email))->exists()) { 
+                return response()->json(['mensaje' => 'El correo ya está en uso'], 400);
+            }
+
             $user = new User();
             $user->matricula = $matricula;
             $user->rol = 'E';
             $user->email = $req->email;
-
-            if (User::where('email', $req->email)->exists()) {
-                response()->json(['mensaje' => 'El correo ya está en uso'], 400);
-            }
-
             $user->password = Hash::make($req->password);
             $user->save();
         }
