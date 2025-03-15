@@ -58,6 +58,7 @@ Route::get('estudiantes', [EstudianteController::class,'index']);
 Route::post('estudiante/guardar', [EstudianteController::class,'store']);
 Route::delete('estudiante/eliminar/{matricula}', [EstudianteController::class,'destroy']);
 Route::get('estudiante/{matricula}', [EstudianteController::class,'estudent']);
+Route::get('/estudiante/{matricula}/actividades', [EstudianteController::class, 'talleresYGimnasios']);
 
 Route::post('estudiante/inscripcion', [EstudianteController::class,'inscrip']);
 Route::post('estudiante/anular', [EstudianteController::class,'anular']);

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Estudiante;
 use App\Models\Inscripcion;
 use App\Models\Talleres;
+use App\Models\Gimnasios;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -21,7 +22,19 @@ class EstudianteController extends Controller
         $estudiante = Estudiante::where('matricula',$matricula)->first();
         return $estudiante;
     }
-    
+
+    public function talleresYGimnasios($matricula)
+    {
+        $inscripciones = Inscripcion::where('matricula', $matricula)->get();
+        $talleres = Talleres::whereIn('id', $inscripciones->pluck('taller_id'))->get();
+        $gimnasios = Gimnasios::whereIn('id', $inscripciones->pluck('gimnasio_id'))->get();
+
+        return response()->json([
+            'talleres' => $talleres,
+            'gimnasios' => $gimnasios
+        ]);
+    }
+
     public function inscrip(Request $req)
     {
         $matricula = trim($req->matricula);
@@ -32,12 +45,12 @@ class EstudianteController extends Controller
             return 'Matricula inexistente';
         }
         $taller = Talleres::find($taller_id);
-        if (!$taller_id){
+        if (!$taller){
             return 'Taller inexistente';
         }
         $inscritos = Inscripcion::where('taller_id',$taller_id)->count();
         if ($inscritos >= $taller->num_alumnos){
-            return 'Taller alcanzo el cupo maximo de estudiantes';
+            return 'Taller alcanzó el cupo máximo de estudiantes';
         }
         $inscripcion = new Inscripcion();
         $inscripcion->matricula = $matricula;
@@ -45,7 +58,7 @@ class EstudianteController extends Controller
         $inscripcion->save();
         return 'Ok';
     }
-    
+
     public function anular(Request $req)
     {
         $matricula = trim($req->matricula);
@@ -55,7 +68,7 @@ class EstudianteController extends Controller
             $inscripcion->delete();
             return 'Ok';
         } else {
-            return 'Inscripcion inexistente';
+            return 'Inscripción inexistente';
         }
     }
 
@@ -71,7 +84,7 @@ class EstudianteController extends Controller
         }
         return 'Usuario no encontrado';
     }
-    
+
     public function store(Request $req)
     {
         $matricula = trim($req->matricula);
