@@ -19,20 +19,25 @@ class EstudianteController extends Controller
     }
 
     public function estudent($matricula) {
-        $estudiante = Estudiante::where('matricula',$matricula)->first();
-        return $estudiante;
+        $estudiante = Estudiante::with('users')->where('matricula', $matricula)->first();
+        return response()->json($estudiante);
     }
-
-    public function talleresYGimnasios($matricula)
+    
+    public function talleresYGimnasios(Request $req)
     {
-        $inscripciones = Inscripcion::where('matricula', $matricula)->get();
-        $talleres = Talleres::whereIn('id', $inscripciones->pluck('taller_id'))->get();
-        $gimnasios = Gimnasios::whereIn('id', $inscripciones->pluck('gimnasio_id'))->get();
-
-        return response()->json([
-            'talleres' => $talleres,
-            'gimnasios' => $gimnasios
+        $req->validate([
+            'matricula' => 'required|string',
+            'taller_id' => 'required|integer|exists:talleres,id'
         ]);
+    
+        $matricula = trim($req->matricula);
+        $taller_id = $req->taller_id;
+    
+        $inscrito = Inscripcion::where('matricula', $matricula)
+            ->where('taller_id', $taller_id)
+            ->exists();
+    
+        return response()->json(['inscrito' => $inscrito]);
     }
 
     public function inscrip(Request $req)
@@ -104,6 +109,12 @@ class EstudianteController extends Controller
             $user->email = $req->email;
             $user->password = Hash::make($req->password);
             $user->save();
+        } else {
+            $user = User::where('matricula', $matricula)->first();
+            if ($req->filled('password')){
+                $user->password = Hash::make($req->password);
+                $user->save();
+            }
         }
 
         $e_user->nombre = $req->nombre;

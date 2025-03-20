@@ -17,6 +17,14 @@ class TallerController extends Controller
         $taller = Talleres::where('id',$id)->first();
         return $taller;
     }
+
+    public function horario($id) {
+        $taller = Talleres::where('id', $id)->first();
+        if (!$taller) {
+            return response()->json(['error' => 'Taller no encontrado'], 404);
+        }
+        return response()->json($taller->horario);
+    }    
     
     public function destroy($id) {
         $taller = Talleres::find($id);

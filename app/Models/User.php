@@ -12,6 +12,11 @@ class Usuarios extends Model
 {
     use HasFactory;
     protected $table = 'users';
+
+    public function estudiante()
+    {
+        return $this->belongsTo(Estudiante::class, 'matricula', 'matricula');
+    }
 }
 
 class User extends Authenticatable
