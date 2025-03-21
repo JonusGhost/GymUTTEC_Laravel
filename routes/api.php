@@ -23,7 +23,7 @@ Route::get('administradores', [AdministradorController::class,'index']);
 Route::post('administrador/guardar', [AdministradorController::class,'store']);
 Route::delete('administrador/eliminar/{matricula}', [AdministradorController::class,'destroy']);
 Route::get('administrador/{matricula}', [AdministradorController::class,'admin']);
-    
+
 Route::post('administrador/talleres/asignar-docente/{matricula}/{taller_id}', [AdministradorController::class,'altaT']);
 Route::post('administrador/talleres/baja-docente', [AdministradorController::class,'bajaT']);       // <-- Se envia JSON
 /*
@@ -52,6 +52,7 @@ Route::get('docentes', [DocenteController::class,'index']);
 Route::post('docente/guardar', [DocenteController::class,'store']);
 Route::delete('docente/eliminar/{matricula}', [DocenteController::class,'destroy']);
 Route::get('docente/{matricula}', [DocenteController::class,'docent']);
+Route::post('/docentes/{matricula}', [DocenteController::class, 'update']);
 
 // Estudiantes
 Route::get('estudiantes', [EstudianteController::class,'index']);
@@ -81,7 +82,7 @@ Route::get('asistencias', [AsistenciaController::class,'index']);
 
 Route::get('asistencias/{taller_id}', [AsistenciaController::class, 'mostrarLista']);
 Route::post('asistencias/pasar-lista', [AsistenciaController::class, 'pasarLista']);       // <-- Se envia JSON
-/* 
+/*
 {
     "taller_id": 1,
     "asistencia": {
