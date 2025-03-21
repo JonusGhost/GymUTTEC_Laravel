@@ -33,7 +33,6 @@ class GimnasioController extends Controller
             $g_modul = new Gimnasios();
         }
         $g_modul->nombre_gim = $req->nombre_gim;
-        $g_modul->nombre_tall = $req->nombre_tall;
         if ($req->hasFile('imagen')) {
             $imagen = $req->file('imagen');
             $rutaImagen = $imagen->store('imagenes_talleres', 'public');
