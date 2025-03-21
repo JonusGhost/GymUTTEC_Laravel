@@ -16,8 +16,8 @@ class DocenteController extends Controller
     }
 
     public function docent($matricula) {
-        $estudiante = Docente::where('matricula',$matricula)->first();
-        return $estudiante;
+        $docente = Docente::with('users')->where('matricula', $matricula)->first();
+        return response()->json($docente);
     }
 
     public function destroy($matricula) {
@@ -53,6 +53,12 @@ class DocenteController extends Controller
 
             $user->password = Hash::make($req->password);
             $user->save();
+        } else {
+            $user = User::where('matricula', $matricula)->first();
+            if ($req->filled('password')){
+                $user->password = Hash::make($req->password);
+                $user->save();
+            }
         }
 
         $d_user->nombre = $req->nombre;

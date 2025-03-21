@@ -19,4 +19,9 @@ class Docente extends Model
     {
         return $this->belongsToMany(Gimnasios::class, 'gimnasios_docentes', 'docente_id', 'gimnasio_id');
     }
+
+    public function users()
+    {
+        return $this->belongsTo(User::class, 'matricula', 'matricula');
+    }
 }

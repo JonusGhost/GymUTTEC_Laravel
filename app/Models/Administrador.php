@@ -9,4 +9,9 @@ class Administrador extends Model
 {
     use HasFactory;
     protected $table = 'administradores';
+
+    public function users()
+    {
+        return $this->belongsTo(User::class, 'matricula', 'matricula');
+    }
 }

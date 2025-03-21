@@ -18,8 +18,8 @@ class AdministradorController extends Controller
     }
 
     public function admin($matricula) {
-        $administrador = Administrador::where('matricula',$matricula)->first();
-        return $administrador;
+        $administrador = Administrador::with('users')->where('matricula', $matricula)->first();
+        return response()->json($administrador);
     }
 
     public function destroy($matricula) {
@@ -55,6 +55,12 @@ class AdministradorController extends Controller
 
             $user->password = Hash::make($req->password);
             $user->save();
+        }  else {
+            $user = User::where('matricula', $matricula)->first();
+            if ($req->filled('password')){
+                $user->password = Hash::make($req->password);
+                $user->save();
+            }
         }
 
         $a_user->nombre = $req->nombre;

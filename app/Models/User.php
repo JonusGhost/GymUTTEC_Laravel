@@ -17,6 +17,16 @@ class Usuarios extends Model
     {
         return $this->belongsTo(Estudiante::class, 'matricula', 'matricula');
     }
+
+    public function docente()
+    {
+        return $this->belongsTo(Docente::class, 'matricula', 'matricula');
+    }
+
+    public function admin()
+    {
+        return $this->belongsTo(Administrador::class, 'matricula', 'matricula');
+    }
 }
 
 class User extends Authenticatable
