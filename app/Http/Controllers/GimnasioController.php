@@ -18,6 +18,14 @@ class GimnasioController extends Controller
         return $gimnasio;
     }
 
+    public function horario($id) {
+        $gimnasio = Gimnasios::where('id', $id)->first();
+        if (!$gimnasio) {
+            return response()->json(['error' => 'Gimnasio no encontrado'], 404);
+        }
+        return response()->json($gimnasio->horario);
+    }    
+
     public function destroy($id) {
         $gimnasio = Gimnasios::find($id);
         $gimnasio->delete();

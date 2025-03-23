@@ -76,6 +76,7 @@ Route::get('gimnasios', [GimnasioController::class,'index']);
 Route::post('gimnasio/guardar', [GimnasioController::class,'store']);
 Route::delete('gimnasio/eliminar/{id}', [GimnasioController::class,'destroy']);
 Route::get('gimnasio/{id}', [GimnasioController::class,'gimnasio']);
+Route::get('gimnasios/horario/{id}', [GimnasioController::class,'horario']);
 
 // Asistencias
 Route::get('asistencias', [AsistenciaController::class,'index']);
