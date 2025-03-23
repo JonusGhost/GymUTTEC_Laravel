@@ -14,8 +14,8 @@ class EstudianteController extends Controller
 {
     public function index()
     {
-        $estudiantes = Estudiante::get();
-        return $estudiantes;
+        $estudiantes = Estudiante::with('users')->get();
+        return response()->json($estudiantes);
     }
 
     public function estudent($matricula) {
@@ -46,21 +46,28 @@ class EstudianteController extends Controller
         $taller_id = $req->taller_id;
 
         $a_user = Estudiante::where('matricula', $matricula)->first();
-        if (!$a_user){
+        if (!$a_user) {
             return 'Matricula inexistente';
         }
+
         $taller = Talleres::find($taller_id);
-        if (!$taller){
+        if (!$taller) {
             return 'Taller inexistente';
         }
-        $inscritos = Inscripcion::where('taller_id',$taller_id)->count();
-        if ($inscritos >= $taller->num_alumnos){
+
+        $inscritos = Inscripcion::where('taller_id', $taller_id)->count();
+        if ($inscritos >= $taller->num_alumnos) {
             return 'Taller alcanzó el cupo máximo de estudiantes';
         }
+
+        $taller->num_alumnos = $taller->num_alumnos - 1;
+        $taller->save(); 
+
         $inscripcion = new Inscripcion();
         $inscripcion->matricula = $matricula;
         $inscripcion->taller_id = $taller_id;
         $inscripcion->save();
+
         return 'Ok';
     }
 
@@ -68,9 +75,17 @@ class EstudianteController extends Controller
     {
         $matricula = trim($req->matricula);
         $taller_id = trim($req->taller_id);
+    
         $inscripcion = Inscripcion::where('matricula', $matricula)->where('taller_id', $taller_id)->first();
         if ($inscripcion) {
             $inscripcion->delete();
+
+            $taller = Talleres::find($taller_id);
+            if ($taller) {
+                $taller->num_alumnos = $taller->num_alumnos + 1;
+                $taller->save(); 
+            }
+
             return 'Ok';
         } else {
             return 'Inscripción inexistente';

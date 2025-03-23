@@ -13,8 +13,8 @@ class AdministradorController extends Controller
 {
     public function index()
     {
-        $administradores = Administrador::get();
-        return $administradores;
+        $administradores = Administrador::with('users')->get();
+        return response()->json($administradores);
     }
 
     public function admin($matricula) {

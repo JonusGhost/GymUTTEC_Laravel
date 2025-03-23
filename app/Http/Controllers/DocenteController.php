@@ -11,8 +11,13 @@ class DocenteController extends Controller
 {
     public function index()
     {
-        $docentes = Docente::get();
-        return $docentes;
+        $docentes = Docente::with('users')->get();
+        return response()->json($docentes);
+    }
+
+    public function docent($matricula) {
+        $docente = Docente::with('users')->where('matricula', $matricula)->first();
+        return response()->json($docente);
     }
 
     public function update(Request $req, $matricula)
@@ -42,23 +47,6 @@ class DocenteController extends Controller
         ], 200);
     }
 
-    public function docent($matricula) {
-        $docente = Docente::where('matricula', $matricula)->first();
-        if (!$docente) {
-            return response()->json(['mensaje' => 'Docente no encontrado'], 404);
-        }
-
-        // Get user email
-        $userData = User::where('matricula', $matricula)->first(['email']);
-
-        // Combine docente and email data
-        $response = $docente->toArray();
-        $response['email'] = $userData->email;
-
-        return response()->json($response);
-    }
-
-
     public function destroy($matricula) {
         $user = User::find($matricula);
         if ($user){
@@ -75,21 +63,20 @@ class DocenteController extends Controller
     public function store(Request $req)
     {
         $matricula = trim($req->matricula);
-        $a_user = Docente::where('matricula', $matricula)->first();
+        $d_user = Docente::where('matricula', $matricula)->first();
 
-        if (!$a_user) {
+        if (!$d_user) {
             $d_user = new Docente();
             $d_user->matricula = $matricula;
-
-            $user = new User();
-            $user->matricula = $matricula;
-            $user->rol = 'D';
-            $user->email = $req->email;
 
             if (User::where('email', $req->email)->exists()) {
                 response()->json(['mensaje' => 'El correo ya está en uso'], 400);
             }
 
+            $user = new User();
+            $user->matricula = $matricula;
+            $user->rol = 'D';
+            $user->email = $req->email;
             $user->password = Hash::make($req->password);
             $user->save();
         } else {
