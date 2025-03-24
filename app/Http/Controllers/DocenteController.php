@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Docente;
+use App\Models\Gimnasios;
+use App\Models\Talleres;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -11,41 +13,33 @@ class DocenteController extends Controller
 {
     public function index()
     {
-        $docentes = Docente::with('users')->get();
-        return response()->json($docentes);
+        try {
+            $docentes = Docente::with('users')->get();
+        
+            $docentes->each(function ($docente) {
+                $docente->taller = Talleres::where('emp_docente', $docente->matricula)->first();
+                $docente->gimnasio = Gimnasios::where('emp_docente', $docente->matricula)->first();
+            });
+        
+            return response()->json($docentes);
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
+            ], 500);
+        }
     }
 
     public function docent($matricula) {
         $docente = Docente::with('users')->where('matricula', $matricula)->first();
-        return response()->json($docente);
-    }
-
-    public function update(Request $req, $matricula)
-    {
-        $docente = Docente::where('matricula', $matricula)->first();
-
-        if (!$docente) {
-            return response()->json(['mensaje' => 'Docente no encontrado'], 404);
+    
+        if ($docente) {
+            $docente->taller = Talleres::where('emp_docente', $matricula)->first();
+            $docente->gimnasio = Gimnasios::where('emp_docente', $matricula)->first();
         }
-
-        // Update docente information
-        $docente->nombre = $req->filled('nombre') ? $req->nombre : $docente->nombre;
-        $docente->apellido_pat = $req->filled('apellido_pat') ? $req->apellido_pat : $docente->apellido_pat;
-        $docente->apellido_mat = $req->filled('apellido_mat') ? $req->apellido_mat : $docente->apellido_mat;
-        $docente->num_celular = $req->filled('num_celular') ? $req->num_celular : $docente->num_celular;
-        $docente->afili_seguro = $req->filled('afili_seguro') ? $req->afili_seguro : $docente->afili_seguro;
-        $docente->especialidad = $req->filled('especialidad') ? $req->especialidad : $docente->especialidad;
-        $docente->save();
-
-        // Get user data to include email in response
-        $userData = User::where('matricula', $matricula)->first(['email']);
-
-        return response()->json([
-            'mensaje' => 'Docente actualizado',
-            'docente' => $docente,
-            'email' => $userData->email
-        ], 200);
-    }
+    
+        return response()->json(['docente' => $docente]);
+    }    
 
     public function destroy($matricula) {
         $user = User::find($matricula);

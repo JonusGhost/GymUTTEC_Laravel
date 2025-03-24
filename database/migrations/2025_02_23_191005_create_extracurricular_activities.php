@@ -19,12 +19,8 @@ return new class extends Migration
             $table->text('descripcion')->nullable();
             $table->json('horario')->nullable();
             $table->integer('num_alumnos')->default(0);
-            $table->string('emp_docente_1')->nullable();
-            $table->foreign('emp_docente_1')->references('matricula')->on('docentes')->onDelete('set null');
-            $table->string('emp_docente_2')->nullable();
-            $table->foreign('emp_docente_2')->references('matricula')->on('docentes')->onDelete('set null');
-            $table->string('emp_docente_3')->nullable();
-            $table->foreign('emp_docente_3')->references('matricula')->on('docentes')->onDelete('set null');
+            $table->string('emp_docente')->nullable();
+            $table->foreign('emp_docente')->references('matricula')->on('docentes')->onDelete('set null');
             $table->timestamps();
         });
 

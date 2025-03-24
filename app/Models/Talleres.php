@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Talleres extends Model
 {
     use HasFactory;
+    protected $table = 'talleres';
     protected $fillable = [
         'nombre_tall', 'descripcion', 'num_alumnos', 'enlace_grupo', 'emp_docente'
     ];
@@ -18,6 +19,6 @@ class Talleres extends Model
 
     public function docente()
     {
-        return $this->belongsTo(Docente::class);
+        return $this->belongsTo(Docente::class, 'emp_docente', 'matricula');
     }
 }

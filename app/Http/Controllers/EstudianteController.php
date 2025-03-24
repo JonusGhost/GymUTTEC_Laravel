@@ -3,7 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Estudiante;
-use App\Models\Inscripcion;
+use App\Models\InscripcionTal;
+use App\Models\InscripcionGim;
 use App\Models\Talleres;
 use App\Models\Gimnasios;
 use App\Models\User;
@@ -23,7 +24,7 @@ class EstudianteController extends Controller
         return response()->json($estudiante);
     }
     
-    public function talleresYGimnasios(Request $req)
+    public function talleres(Request $req)
     {
         $req->validate([
             'matricula' => 'required|string',
@@ -33,14 +34,27 @@ class EstudianteController extends Controller
         $matricula = trim($req->matricula);
         $taller_id = $req->taller_id;
     
-        $inscrito = Inscripcion::where('matricula', $matricula)
-            ->where('taller_id', $taller_id)
-            ->exists();
+        $inscrito = InscripcionTal::where('matricula', $matricula)->where('taller_id', $taller_id)->exists();
+    
+        return response()->json(['inscrito' => $inscrito]);
+    }
+    
+    public function gimnasios(Request $req)
+    {
+        $req->validate([
+            'matricula' => 'required|string',
+            'gim' => 'required|integer|exists:talleres,id'
+        ]);
+    
+        $matricula = trim($req->matricula);
+        $gimnasio_id = $req->gimnasio_id;
+    
+        $inscrito = InscripcionGim::where('matricula', $matricula)->where('gimnasio_id', $gimnasio_id)->exists();
     
         return response()->json(['inscrito' => $inscrito]);
     }
 
-    public function inscrip(Request $req)
+    public function inscripTal(Request $req)
     {
         $matricula = trim($req->matricula);
         $taller_id = $req->taller_id;
@@ -55,7 +69,7 @@ class EstudianteController extends Controller
             return 'Taller inexistente';
         }
 
-        $inscritos = Inscripcion::where('taller_id', $taller_id)->count();
+        $inscritos = InscripcionTal::where('taller_id', $taller_id)->count();
         if ($inscritos >= $taller->num_alumnos) {
             return 'Taller alcanzó el cupo máximo de estudiantes';
         }
@@ -63,7 +77,7 @@ class EstudianteController extends Controller
         $taller->num_alumnos = $taller->num_alumnos - 1;
         $taller->save(); 
 
-        $inscripcion = new Inscripcion();
+        $inscripcion = new InscripcionTal();
         $inscripcion->matricula = $matricula;
         $inscripcion->taller_id = $taller_id;
         $inscripcion->save();
@@ -71,12 +85,43 @@ class EstudianteController extends Controller
         return 'Ok';
     }
 
-    public function anular(Request $req)
+    public function inscripGim(Request $req)
+    {
+        $matricula = trim($req->matricula);
+        $gimnasio_id = $req->gimnasio_id;
+
+        $a_user = Estudiante::where('matricula', $matricula)->first();
+        if (!$a_user) {
+            return 'Matricula inexistente';
+        }
+
+        $gimnasio = Gimnasios::find($gimnasio_id);
+        if (!$gimnasio) {
+            return 'Gimnasio inexistente';
+        }
+
+        $inscritos = InscripcionGim::where('gimnasio_id', $gimnasio_id)->count();
+        if ($inscritos >= $gimnasio->num_alumnos) {
+            return 'Taller alcanzó el cupo máximo de estudiantes';
+        }
+
+        $gimnasio->num_alumnos = $gimnasio->num_alumnos - 1;
+        $gimnasio->save(); 
+
+        $inscripcion = new InscripcionGim();
+        $inscripcion->matricula = $matricula;
+        $inscripcion->gimnasio_id = $gimnasio_id;
+        $inscripcion->save();
+
+        return 'Ok';
+    }
+
+    public function anularTal(Request $req)
     {
         $matricula = trim($req->matricula);
         $taller_id = trim($req->taller_id);
     
-        $inscripcion = Inscripcion::where('matricula', $matricula)->where('taller_id', $taller_id)->first();
+        $inscripcion = InscripcionTal::where('matricula', $matricula)->where('taller_id', $taller_id)->first();
         if ($inscripcion) {
             $inscripcion->delete();
 
@@ -84,6 +129,27 @@ class EstudianteController extends Controller
             if ($taller) {
                 $taller->num_alumnos = $taller->num_alumnos + 1;
                 $taller->save(); 
+            }
+
+            return 'Ok';
+        } else {
+            return 'Inscripción inexistente';
+        }
+    }
+
+    public function anularGim(Request $req)
+    {
+        $matricula = trim($req->matricula);
+        $gimnasio_id = trim($req->gimnasio_id);
+    
+        $inscripcion = InscripcionGim::where('matricula', $matricula)->where('gimnasio_id', $gimnasio_id)->first();
+        if ($inscripcion) {
+            $inscripcion->delete();
+
+            $gimnasio = Gimnasios::find($gimnasio_id);
+            if ($gimnasio) {
+                $gimnasio->num_alumnos = $gimnasio->num_alumnos + 1;
+                $gimnasio->save(); 
             }
 
             return 'Ok';

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Gimnasios;
+use App\Models\Docente;
 use Illuminate\Http\Request;
 
 class GimnasioController extends Controller
@@ -29,7 +30,7 @@ class GimnasioController extends Controller
     public function destroy($id) {
         $gimnasio = Gimnasios::find($id);
         $gimnasio->delete();
-        return 'Ok';;
+        return 'Ok';
     }
 
     public function store(Request $req)
@@ -50,11 +51,32 @@ class GimnasioController extends Controller
         $g_modul->descripcion = $req->descripcion;
         $g_modul->horario = json_decode($req->horario, true);
         $g_modul->num_alumnos = $req->num_alumnos;
-        $g_modul->emp_docente_1 = $req->emp_docente_1;
-        $g_modul->emp_docente_2 = $req->emp_docente_2;
-        $g_modul->emp_docente_3 = $req->emp_docente_3;
+        $g_modul->emp_docente = $req->emp_docente;
         $g_modul->save();
 
         return 'Ok';
+    }
+
+    public function asignarDocente(Request $request, $gimnasioId)
+    {
+        $request->validate([
+            'emp_docente' => 'required|exists:docentes,matricula'
+        ]);
+
+        $docente = Docente::where('matricula', $request->emp_docente)->first();
+
+        if ($docente->gimnasio) {
+            return response()->json(['error' => 'El docente ya está asignado a otro gimnasio'], 400);
+        }
+
+        if ($docente->taller) {
+            return response()->json(['error' => 'El docente ya está asignado a un taller'], 400);
+        }
+
+        $gimnasio = Gimnasios::findOrFail($gimnasioId);
+        $gimnasio->emp_docente = $docente->matricula;
+        $gimnasio->save();
+
+        return response()->json(['message' => 'Docente asignado con éxito']);
     }
 }

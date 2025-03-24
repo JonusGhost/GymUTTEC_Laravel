@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Talleres;
+use App\Models\Docente;
 use Illuminate\Http\Request;
 
 class TallerController extends Controller
@@ -54,5 +55,27 @@ class TallerController extends Controller
         $t_modul->save();
 
         return 'Ok';
+    }
+    public function asignarDocente(Request $request, $tallerId)
+    {
+        $request->validate([
+            'emp_docente' => 'required|exists:docentes,matricula'
+        ]);
+
+        $docente = Docente::where('matricula', $request->emp_docente)->first();
+
+        if ($docente->gimnasio) {
+            return response()->json(['error' => 'El docente ya está asignado a un gimnasio'], 400);
+        }
+
+        if ($docente->taller) {
+            return response()->json(['error' => 'El docente ya está asignado a otro taller'], 400);
+        }
+
+        $taller = Talleres::findOrFail($tallerId);
+        $taller->emp_docente = $docente->matricula;
+        $taller->save();
+
+        return response()->json(['message' => 'Docente asignado con éxito']);
     }
 }

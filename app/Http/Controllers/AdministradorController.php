@@ -78,11 +78,15 @@ class AdministradorController extends Controller
 
     public function altaT($matricula, $taller_id)
     {
-        $taller = Talleres::findOrFail($taller_id);
-        $taller->emp_docente = $matricula;
-        $taller->save();
-
-        return 'Docente asignado al taller correctamente.';
+        $taller = Talleres::find($taller_id);
+        if ($taller) {
+            $taller->emp_docente = $matricula;
+            $taller->save();
+    
+            return response()->json(['message' => 'Docente asignado correctamente al taller.']);
+        }
+    
+        return response()->json(['error' => 'Taller no encontrado.'], 404);;
     }
 
     public function bajaT(Request $req)
@@ -101,20 +105,17 @@ class AdministradorController extends Controller
         return 'Ok';
     }
 
-    public function altaG(Request $req)
+    public function altaG($matricula, $gimnasio_id)
     {
-        $validated = $req->validate([
-            'gimnasio_id' => 'required|exists:gimnasios,id',
-            'docente_ids' => 'required|array|min:1|max:3',
-            'docente_ids.*' => 'exists:docentes,matricula',
-        ]);
-
-        $gimnasio = Gimnasios::findOrFail($validated['gimnasio_id']);
-        $gimnasio->emp_docente_1 = $validated['docente_ids'][0] ?? null;
-        $gimnasio->emp_docente_2 = $validated['docente_ids'][1] ?? null;
-        $gimnasio->emp_docente_3 = $validated['docente_ids'][2] ?? null;
-        $gimnasio->save();
-        return 'Ok';
+        $gimnasio = Gimnasios::find($gimnasio_id);
+        if ($gimnasio) {
+            $gimnasio->emp_docente = $matricula;
+            $gimnasio->save();
+    
+            return response()->json(['message' => 'Docente asignado correctamente al taller.']);
+        }
+    
+        return response()->json(['error' => 'Taller no encontrado.'], 404);
     }
 
     public function bajaG(Request $req)
@@ -124,12 +125,8 @@ class AdministradorController extends Controller
             'docente_id' => 'required|exists:docentes,matricula',
         ]);
         $gimnasio = Gimnasios::findOrFail($validated['gimnasio_id']);
-        if ($gimnasio->emp_docente_1 == $validated['docente_id']) {
-            $gimnasio->emp_docente_1 = null;
-        } elseif ($gimnasio->emp_docente_2 == $validated['docente_id']) {
-            $gimnasio->emp_docente_2 = null;
-        } elseif ($gimnasio->emp_docente_3 == $validated['docente_id']) {
-            $gimnasio->emp_docente_3 = null;
+        if ($gimnasio->emp_docente == $validated['docente_id']) {
+            $gimnasio->emp_docente = null;
         } else {
             return 'El docente no está asignado a este gimnasio.';
         }

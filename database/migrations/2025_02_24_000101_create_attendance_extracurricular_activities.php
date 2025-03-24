@@ -23,7 +23,7 @@ return new class extends Migration
             $table->foreign('matricula')->references('matricula')->on('estudiantes')->onDelete('cascade');
         });
 
-        Schema::create('inscripciones', function (Blueprint $table) {
+        Schema::create('inscripciones_tal', function (Blueprint $table) {
             $table->id();
             $table->string('matricula');
             $table->unsignedBigInteger('taller_id');
@@ -32,7 +32,16 @@ return new class extends Migration
             $table->foreign('taller_id')->references('id')->on('talleres')->onDelete('cascade');
             $table->unique(['taller_id', 'matricula']);
         });
-        
+
+        Schema::create('inscripciones_gim', function (Blueprint $table) {
+            $table->id();
+            $table->string('matricula');
+            $table->unsignedBigInteger('gimnasio_id');
+            $table->timestamps();            
+            $table->foreign('matricula')->references('matricula')->on('estudiantes')->onDelete('cascade');
+            $table->foreign('gimnasio_id')->references('id')->on('gimnasios')->onDelete('cascade');
+            $table->unique(['gimnasio_id', 'matricula']);
+        });
     }
 
     /**
@@ -41,5 +50,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('asistencia_talleres');
+        Schema::dropIfExists('inscripciones_tal');
+        Schema::dropIfExists('inscripciones_gim');
     }
 };

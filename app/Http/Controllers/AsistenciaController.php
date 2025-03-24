@@ -16,14 +16,18 @@ class AsistenciaController extends Controller
     }
 
     public function mostrarLista($taller_id)
-    {
-        $taller = Talleres::findOrFail($taller_id);
-        $alumnos = Estudiante::whereIn('matricula', function($query) use ($taller_id) {
-            $query->select('matricula')->from('inscripciones')->where('taller_id', $taller_id);
-        })->get();
+{
+    $taller = Talleres::findOrFail($taller_id);
+    $alumnos = Estudiante::whereIn('matricula', function($query) use ($taller_id) {
+        $query->select('matricula')->from('inscripciones')->where('taller_id', $taller_id);
+    })->get();
 
-        return $alumnos;
-    }
+    return response()->json([
+        'taller' => $taller,
+        'alumnos' => $alumnos
+    ]);
+}
+
 
     public function pasarLista(Request $req)
     {

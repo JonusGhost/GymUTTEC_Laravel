@@ -32,13 +32,8 @@ Route::post('administrador/talleres/baja-docente', [AdministradorController::cla
     "docente_id": "1001"
 }
 */
-Route::post('administrador/gimnasio/asignar-docente', [AdministradorController::class,'altaG']);    // <-- Se envia JSON
-/*
-{
-    "gimnasio_id": 1,
-    "docente_ids": ["1001", "1002", "1003"]
-}
-*/
+Route::post('administrador/gimnasio/asignar-docente/{matricula}/{taller_id}', [AdministradorController::class,'altaG']);    // <-- Se envia JSON
+
 Route::post('administrador/gimnasio/baja-docente', [AdministradorController::class,'bajag']);       // <-- Se envia JSON
 /*
 {
@@ -59,10 +54,14 @@ Route::get('estudiantes', [EstudianteController::class,'index']);
 Route::post('estudiante/guardar', [EstudianteController::class,'store']);
 Route::delete('estudiante/eliminar/{matricula}', [EstudianteController::class,'destroy']);
 Route::get('estudiante/{matricula}', [EstudianteController::class,'estudent']);
-Route::post('estudiante/taller', [EstudianteController::class, 'talleresYGimnasios']);
 
-Route::post('estudiante/inscripcion', [EstudianteController::class,'inscrip']);
-Route::post('estudiante/anular', [EstudianteController::class,'anular']);
+Route::post('estudiante/taller', [EstudianteController::class, 'talleres']);
+Route::post('estudiante/taller/inscripcion', [EstudianteController::class,'inscripTal']);
+Route::post('estudiante/taller/anular', [EstudianteController::class,'anularTal']);
+
+Route::post('estudiante/gimnasio', [EstudianteController::class, 'gimnasios']);
+Route::post('estudiante/gimnasio/inscripcion', [EstudianteController::class,'inscripGim']);
+Route::post('estudiante/gimnasio/anular', [EstudianteController::class,'anularGim']);
 
 // Talleres
 Route::get('talleres', [TallerController::class,'index']);
@@ -96,4 +95,5 @@ Route::post('asistencias/pasar-lista', [AsistenciaController::class, 'pasarLista
 
 // Inscripciones
 Route::get('inscripciones', [InscripionController::class,'index']);
-Route::get('inscripcion/estudiante/{matricula}', [InscripionController::class,'esttaller']);
+Route::get('inscripcion/taller/estudiante/{matricula}', [InscripionController::class,'esttaller']);
+Route::get('inscripcion/gimnasio/estudiante/{matricula}', [InscripionController::class,'estgimnasio']);
