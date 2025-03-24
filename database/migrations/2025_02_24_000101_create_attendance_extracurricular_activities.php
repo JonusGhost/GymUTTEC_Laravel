@@ -23,6 +23,18 @@ return new class extends Migration
             $table->foreign('matricula')->references('matricula')->on('estudiantes')->onDelete('cascade');
         });
 
+        Schema::create('asistencia_gimnasios', function (Blueprint $table) {
+            $table->id();
+            $table->dateTime('fecha_asistencia');
+            $table->integer('horas_asignadas');
+            $table->unsignedBigInteger('gimnasio_id');
+            $table->string('matricula');
+            $table->enum('estado', ['presente', 'ausente', 'justificado'])->default('presente');
+            $table->timestamps();
+            $table->foreign('gimnasio_id')->references('id')->on('gimnasios')->onDelete('cascade');
+            $table->foreign('matricula')->references('matricula')->on('estudiantes')->onDelete('cascade');
+        });
+
         Schema::create('inscripciones_tal', function (Blueprint $table) {
             $table->id();
             $table->string('matricula');

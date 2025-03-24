@@ -13,6 +13,10 @@ class Gimnasios extends Model
         'nombre_gim', 'descripcion', 'num_alumnos', 'enlace_grupo', 'emp_docente'
     ];
 
+    protected $casts = [
+        'horario' => 'array',
+    ];
+
     public function docente()
     {
         return $this->belongsTo(Docente::class, 'emp_docente', 'matricula');

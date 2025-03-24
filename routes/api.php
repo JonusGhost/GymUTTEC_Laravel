@@ -78,10 +78,14 @@ Route::get('gimnasio/{id}', [GimnasioController::class,'gimnasio']);
 Route::get('gimnasios/horario/{id}', [GimnasioController::class,'horario']);
 
 // Asistencias
-Route::get('asistencias', [AsistenciaController::class,'index']);
+Route::get('asistencias-tal', [AsistenciaController::class,'indextal']);
+Route::get('asistencias-gim', [AsistenciaController::class,'indexgim']);
 
-Route::get('asistencias/{taller_id}', [AsistenciaController::class, 'mostrarLista']);
-Route::post('asistencias/pasar-lista', [AsistenciaController::class, 'pasarLista']);       // <-- Se envia JSON
+Route::get('asistencias-taller/{taller_id}', [AsistenciaController::class, 'mostrarListaTal']);
+Route::post('asistencias/pasar-lista-Taller', [AsistenciaController::class, 'pasarListaTal']);
+
+Route::get('asistencias-gimnasio/{gimnasio_id}', [AsistenciaController::class, 'mostrarListaGim']);
+Route::post('asistencias/pasar-lista-Gimnasio', [AsistenciaController::class, 'pasarListaGim']);       // <-- Se envia JSON
 /*
 {
     "taller_id": 1,

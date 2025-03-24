@@ -16,12 +16,6 @@ class InscripionController extends Controller
         return response()->json(['gimnasios' => $inscripcionesGim,'talleres' => $inscripcionesTal]);
     }
 
-    public function install()
-    {
-        $inscripcionesTal = InscripcionTal::all();
-        return response()->json(['talleres' => $inscripcionesTal]);
-    }
-
     public function esttaller($matricula)
     {
         $inscripciones = InscripcionTal::where('matricula', $matricula)->get();
